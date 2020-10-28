@@ -23,5 +23,5 @@ router.post('api/users/signin', [
 
   });
 
-export { router };
+export { router as signinRouter };
 

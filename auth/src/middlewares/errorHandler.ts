@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 
 import { CustomError } from '../errors/customError';
-import { DatabaseConnectionError } from '../errors/databaseConnnectionError';
 
 export const errorHandler = (
   err: Error,
@@ -10,6 +9,7 @@ export const errorHandler = (
   next: NextFunction
 ) => {
   if (err instanceof CustomError) {
+    console.log('error from middleware', err);
     return res
       .status(err.statusCode)
       .send({ errors: err.serialiseErrors() })

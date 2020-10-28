@@ -6,7 +6,8 @@ const router = express.Router();
 router.get('api/users/user',
   (req: Request, res: Response) => {
     console.log('getting a user');
-    res.send({});
+    res.send('Hello from a user');
+    // res.send({});
   });
 
-export { router };
+export { router as userRouter };

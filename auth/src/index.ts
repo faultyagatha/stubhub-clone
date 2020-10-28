@@ -5,10 +5,10 @@ import cookieSession from 'cookie-session';
 import mongoose from 'mongoose';
 
 
-import { router as userRouter } from './routes/user';
-import { router as signinRouter } from './routes/signin';
-import { router as signupRouter } from './routes/signup';
-import { router as signoutRouter } from './routes/signout';
+import { userRouter } from './routes/user';
+import { signinRouter } from './routes/signin';
+import { signupRouter } from './routes/signup';
+import { signoutRouter } from './routes/signout';
 import { errorHandler } from './middlewares/errorHandler';
 import { NotFoundError } from './errors/notFoundError';
 
@@ -31,6 +31,7 @@ app.all('*', async (req, res) => { throw new NotFoundError() });
 app.use(errorHandler);
 
 const start = async () => {
+  if (!process.env.JWT_KEY) { throw new Error('JWT_KEY must be defined') };
   try {
     await mongoose.connect('mongodb://auth-mongo-srv:27017/auth', {
       useNewUrlParser: true,

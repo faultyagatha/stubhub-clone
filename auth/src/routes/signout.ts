@@ -23,4 +23,4 @@ router.post('api/users/signout', [
 
   });
 
-export { router };
+export { router as signoutRouter };

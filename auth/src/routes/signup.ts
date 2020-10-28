@@ -37,7 +37,8 @@ router.post(
     const token = jwt.sign({
       id: user.id,
       email: user.email
-    }, 'secrettoreplace');
+    }, process.env.JWT_KEY!);
+
     //store it on a session object
     req.session = {
       jwt: token
@@ -46,4 +47,4 @@ router.post(
     res.status(201).send(user);
   });
 
-export { router };
+export { router as signupRouter };
