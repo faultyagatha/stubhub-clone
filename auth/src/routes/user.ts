@@ -7,7 +7,6 @@ router.get('api/users/user',
   (req: Request, res: Response) => {
     console.log('getting a user');
     res.send({});
-
   });
 
 export { router };
