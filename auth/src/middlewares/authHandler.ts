@@ -1,33 +1,15 @@
 import express, { NextFunction, Request, Response } from 'express';
-import jwt from 'jsonwebtoken';
 
-interface IUserPayload {
-  id: string;
-  email: string;
-};
+import { NotAuthorisedError } from '../errors/notAuthorisedError';
 
-declare global {
-  namespace Express {
-    interface Request {
-      currentUser?: IUserPayload;
-    }
-  }
-};
-
-export const currentUser = (
+/** will run AFTER currentUserHandler */
+export const requireAuth = (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  //check JWT
-  if (!req.session?.jwt) {
-    return next();
-  }
-  try {
-    const payload = jwt.verify(req.session.jwt, process.env.JWT_KEY!) as IUserPayload;
-    req.currentUser = payload;
-  } catch (err) {
-
+  if (!req.currentUser) {
+    throw new NotAuthorisedError();
   }
   next();
-}
+};
