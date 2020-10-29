@@ -1,21 +1,13 @@
 import express, { Request, Response } from 'express';
-import { body, validationResult } from 'express-validator';
-import jwt from 'jsonwebtoken';
+
+import { currentUser } from '../middlewares/authHandler';
 
 const router = express.Router();
 
-router.get('api/users/user',
+router.get('/api/users/user',
+  currentUser,
   (req: Request, res: Response) => {
-    if (!req.session || !req.session.jwt) {
-      return res.send({ currentUser: null });
-    }
-
-    try {
-      const payload = jwt.verify(req.session.jwt, process.env.JWT_KEY!);
-      res.send({ current: payload });
-    } catch (err) {
-      res.send({ currentUser: null });
-    }
+    res.send({ user: req.currentUser || null }); //send back null if the user is not logged in
   });
 
 export { router as userRouter };
