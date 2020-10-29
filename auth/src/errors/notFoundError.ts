@@ -8,6 +8,6 @@ export class NotFoundError extends CustomError {
   }
 
   serialiseErrors() {
-    return [{ message: 'Not found' }];
+    return [{ message: 'Page not found' }];
   }
 }

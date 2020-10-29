@@ -1,27 +1,58 @@
 import express, { Request, Response } from 'express';
-import { body, validationResult } from 'express-validator';
+import { body } from 'express-validator';
+import jwt from 'jsonwebtoken';
+
+import { BadRequestError } from '../errors/badRequestError';
+import { validateRequest } from '../middlewares/validateRequests';
+import { User } from '../models/user';
+import { Password } from '../helpers/password';
 
 const router = express.Router();
 
-router.post('api/users/signin', [
-  body('email')
-    .isEmail()
-    .withMessage('Email must be valid'),
-  body('password')
-    .trim()
-    .isLength({ min: 4, max: 20 })
-    .withMessage('Password must be between 4 and 20 characters')
-],
-  (req: Request, res: Response) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).send(errors.array);
-    }
+router.post(
+  '/api/users/signin',
+  [
+    body('email')
+      .isEmail()
+      .withMessage('Email must be valid'),
+    body('password')
+      .trim()
+      .notEmpty()
+      .withMessage('You must supply a password')
+  ],
+  validateRequest,
+  async (req: Request, res: Response) => {
     const { email, password } = req.body;
-    console.log('creating user');
-    res.send({});
 
-  });
+    const existingUser = await User.findOne({ email });
+    if (!existingUser) {
+      throw new BadRequestError('Invaid login data');
+    }
+
+    const passwordsMatch = await Password.compare(
+      existingUser.password,
+      password
+    );
+    if (!passwordsMatch) {
+      throw new BadRequestError('Invaid login data');
+    }
+
+    // Generate JWT
+    const token = jwt.sign(
+      {
+        id: existingUser.id,
+        email: existingUser.email
+      },
+      process.env.JWT_KEY!
+    );
+
+    // Store it on session object
+    req.session = {
+      jwt: token
+    };
+
+    res.status(200).send(existingUser);
+  }
+);
 
 export { router as signinRouter };
-
