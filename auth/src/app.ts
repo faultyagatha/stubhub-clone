@@ -2,8 +2,6 @@ import express from 'express';
 import 'express-async-errors';
 import { json } from 'body-parser';
 import cookieSession from 'cookie-session';
-import mongoose from 'mongoose';
-
 
 import { userRouter } from './routes/user';
 import { signinRouter } from './routes/signin';
@@ -18,7 +16,7 @@ app.use(json());
 app.use(
   cookieSession({
     signed: false,
-    secure: true
+    secure: process.env.NODE_ENV !== 'test' //set value depending on our env
   })
 );
 

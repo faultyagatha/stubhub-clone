@@ -6,6 +6,8 @@ let mongo: any;
 
 //run mongodb in memory to run different tests simultaneously 
 beforeAll(async () => {
+  //temporary secret, only for testing purpose
+  process.env.JWT_KEY = 'hfjhfjjs';
   mongo = new MongoMemoryServer();
   const mongoUri = await mongo.getUri();
 
