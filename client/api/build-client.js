@@ -5,6 +5,7 @@ export default ({ req }) => {
     //check if the function is executed on a server
     //window object exists only in the client
 
+    //return axios instance
     return axios.create({
       baseURL: 'http://ingress-nginx-controller.ingress-nginx.svc.cluster.local',
       headers: req.headers

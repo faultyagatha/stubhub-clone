@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.get('/api/users/user',
   currentUser,
-  requireAuth,
+  // requireAuth,
   (req: Request, res: Response) => {
     res.send({ user: req.currentUser || null }); //send back null if the user is not logged in
   });

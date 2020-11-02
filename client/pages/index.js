@@ -2,8 +2,11 @@ import buildClient from '../api/build-client';
 
 /** executed on a browser */
 const LandingPage = ({ user }) => {
-  console.log(user);
-  return <h1>Landing Page</h1>;
+  return user ? (
+    <h1>You are signed in</h1>
+  ) : (
+      <h1>You are not signed in</h1>
+    );
 };
 
 /** executed either on a server or on a client - url must be adjusted */
