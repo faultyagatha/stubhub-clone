@@ -1,7 +1,6 @@
 import express, { Request, Response } from 'express';
-
-import { currentUser } from '../middlewares/currentUserHandler';
-import { requireAuth } from '../middlewares/authHandler';
+import { currentUser } from '@martiorg/common';
+import { requireAuth } from '@martiorg/common';
 
 const router = express.Router();
 
