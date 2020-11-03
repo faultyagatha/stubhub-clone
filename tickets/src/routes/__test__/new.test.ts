@@ -2,6 +2,7 @@ import request from 'supertest';
 
 import { app } from '../../app';
 import { authHelper } from '../../test/authHelper';
+import { Ticket } from '../../models/ticket';
 
 it('has a route handler listening to /api/tickets for post req', async () => {
   const response = await request(app)
@@ -27,7 +28,7 @@ it('returns a status other than 401 when a user is signed in', async () => {
 
 it('returns an error if an invalid title is provided', async () => {
   await request(app)
-    .post('/api/ticket')
+    .post('/api/tickets')
     .set('Cookie', authHelper())
     .send({
       title: '',
@@ -38,7 +39,7 @@ it('returns an error if an invalid title is provided', async () => {
 
 it('returns an error if an invalid price is provided', async () => {
   await request(app)
-    .post('/api/ticket')
+    .post('/api/tickets')
     .set('Cookie', authHelper())
     .send({
       title: 'sometitle',
@@ -48,12 +49,18 @@ it('returns an error if an invalid price is provided', async () => {
 });
 
 it('creates a ticket with valid inputs', async () => {
+  //check how many records are in the db
+  let tickets = await Ticket.find({});
+  expect(tickets.length).toEqual(0);
+
   await request(app)
-    .post('/api/ticket')
+    .post('/api/tickets')
     .set('Cookie', authHelper())
     .send({
       title: 'validtitle',
       price: 19
     })
     .expect(201);
+  tickets = await Ticket.find({});
+  expect(tickets.length).toEqual(1);
 });

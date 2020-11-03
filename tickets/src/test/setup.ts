@@ -7,6 +7,8 @@ let mongo: any;
 beforeAll(async () => {
   //temporary secret, only for testing purpose
   process.env.JWT_KEY = 'hfjhfjjs';
+  process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+
   mongo = new MongoMemoryServer();
   const mongoUri = await mongo.getUri();
 
