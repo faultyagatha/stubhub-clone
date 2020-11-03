@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
-import { requireAuth, validateRequest } from '@martiorg/common';
+import { requireAuth } from '@martiorg/common';
+import { validateRequest } from '@martiorg/common';
 
 import { Ticket } from '../models/ticket';
 

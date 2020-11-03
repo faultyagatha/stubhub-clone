@@ -6,6 +6,7 @@ import { errorHandler, NotFoundError } from '@martiorg/common';
 import { currentUser } from '@martiorg/common';
 
 import { createTicketRouter } from './routes/new';
+import { showTickerRouter } from './routes/show';
 
 export const app = express();
 app.set('trust proxy', true);
@@ -19,6 +20,7 @@ app.use(
 
 app.use(currentUser); //goes to requireAuth middleware on all protected routes
 app.use(createTicketRouter);
+app.use(showTickerRouter);
 
 //async is properly handled without next() by 'express-async-errors'
 app.all('*', async (req, res) => {
