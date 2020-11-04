@@ -13,24 +13,23 @@ it('returns a 404 if the ticket is not found', async () => {
 });
 
 it('returns the ticket if the ticket is found', async () => {
-  const title = 'validtitle';
-  const price = 20;
 
   //create a ticket
   const response = await request(app)
     .post('/api/tickets')
     .set('Cookie', authHelper())
     .send({
-      title,
-      price,
+      title: 'valid',
+      price: 20,
     })
     .expect(201);
 
   const ticketResponse = await request(app)
     .get(`/api/tickets/${response.body.id}`)
     .send()
-    .expect(200);
+    .expect(200); //got 400 "Bad Request"
+  // console.log(ticketResponse.body)
 
-  expect(ticketResponse.body.title).toEqual(title);
-  expect(ticketResponse.body.price).toEqual(price);
+  expect(ticketResponse.body.title).toEqual('valid');
+  expect(ticketResponse.body.price).toEqual(20);
 });

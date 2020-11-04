@@ -1,11 +1,15 @@
 import jwt from 'jsonwebtoken';
+import mongoose from 'mongoose';
 
 /** a helper function to auth a user */
 export const authHelper = () => {
 
+  //we need a unique id each time a test runs to test all routes correctly
+  const testId = new mongoose.Types.ObjectId().toHexString();
+
   //build a JWT payload {id, email}
   const payload = {
-    id: '19191919',
+    id: testId,
     email: 'test@test.com'
   };
 
