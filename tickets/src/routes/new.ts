@@ -4,6 +4,8 @@ import { requireAuth } from '@martiorg/common';
 import { validateRequest } from '@martiorg/common';
 
 import { Ticket } from '../models/ticket';
+import { TicketCreatedPublisher } from '../events/publishers/ticketCreatedPublisher';
+import { natsWrapper } from '../nats-wrapper';
 
 const router = express.Router();
 
@@ -27,6 +29,15 @@ router.post('/api/tickets',
       userId: req.currentUser!.id
     });
     await ticket.save();
+    //publish a new event
+    await new TicketCreatedPublisher(natsWrapper.client).publish({
+      id: ticket.id,
+      title: ticket.title,
+      price: ticket.price,
+      userId: ticket.userId
+    });
+
+    console.log(ticket);
     res.sendStatus(201).send(ticket);
   });
 

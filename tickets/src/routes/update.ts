@@ -8,6 +8,8 @@ import {
 } from '@martiorg/common';
 
 import { Ticket } from '../models/ticket';
+import { TicketUpdatedPublisher } from '../events/publishers/ticketUpdatedPublisher';
+import { natsWrapper } from '../nats-wrapper';
 
 const router = express.Router();
 
@@ -35,6 +37,15 @@ router.put('/api/tickets/:id',
     });
 
     await ticket.save();
+    //publish the event 
+    // TODO: better to save the event in the DB beforehand
+    new TicketUpdatedPublisher(natsWrapper.client).publish({
+      id: ticket.id,
+      title: ticket.title,
+      price: ticket.price,
+      userId: ticket.userId
+    });
+
     res.send(ticket);
   });
 
