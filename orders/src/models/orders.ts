@@ -3,6 +3,8 @@ import { OrderStatus } from '@martiorg/common';
 
 import { ITicketDocument } from './ticket';
 
+export { OrderStatus }; // expose to the ticket model for convenience
+
 /** interface describing the order schema properties */
 interface IOrder {
   userId: string;
@@ -53,7 +55,7 @@ const orderSchema = new mongoose.Schema({
   });
 
 //custom safe order instantiation to help TS to protect order attributes
-orderSchema.statics.createTicket = (attrs: IOrder) => {
+orderSchema.statics.createOrder = (attrs: IOrder) => {
   return new Order(attrs);
 }
 

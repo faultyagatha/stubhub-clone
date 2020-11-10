@@ -1,9 +1,19 @@
 import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
-import { requireAuth, validateRequest } from '@martiorg/common';
+import {
+  BadRequestError,
+  NotFoundError,
+  OrderStatus,
+  requireAuth,
+  validateRequest
+} from '@martiorg/common';
 import mongoose from 'mongoose';
 
+import { Order } from '../models/orders';
+import { Ticket } from '../models/ticket';
+
 const router = express.Router();
+const EXPIRES_SEC = 15 * 60; //cound be an env variable
 
 router.post('/api/orders',
   requireAuth,
@@ -17,10 +27,33 @@ router.post('/api/orders',
   ],
   validateRequest,
   async (req: Request, res: Response) => {
-    // const orders = await Order.find({});
+    //find the ticket the user is trying to order
+    const { ticketId } = req.body;
+    const ticket = await Ticket.findById(ticketId);
+    if (!ticket) {
+      throw new NotFoundError();
+    }
+    //make sure that the ticket is not already reserved
+    const isReserved = await ticket.isReserved();
+    if (isReserved) {
+      throw new BadRequestError('Ticket is already reserved');
+    }
 
-    // res.send(orders);
-    res.send({});
+    //calculate an expiraion date for the order
+    const expiration = new Date();
+    expiration.setSeconds(expiration.getSeconds() + EXPIRES_SEC);
+
+    //create the order and save it in the DB
+    const order = Order.createOrder({
+      userId: req.currentUser!.id,
+      status: OrderStatus.Created,
+      expiresAt: expiration,
+      ticket: ticket
+    });
+    await order.save();
+    //publish an event that order was created
+
+    res.status(201).send(order);
   })
 
 
