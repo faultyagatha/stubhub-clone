@@ -1,6 +1,9 @@
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import mongoose from 'mongoose';
 
+//fake version of natsWrapper
+jest.mock('natsWrapper');
+
 let mongo: any;
 
 //run mongodb in memory to run different tests simultaneously 

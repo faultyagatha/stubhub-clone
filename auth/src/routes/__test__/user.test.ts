@@ -7,9 +7,9 @@ it('returns null if not authenticated', async () => {
   const response = await request(app)
     .get('/api/users/user')
     .send()
-    .expect(401);
-  expect(response.body.errors[0].message).toEqual('You are not authorised');
-  //expect(response.body.user).toEqual(null);
+    .expect(200); //OK
+  //expect(response.body.errors[0].message).toEqual('You are not authorised');
+  expect(response.body.user).toEqual(null);
 });
 
 it('returns details of the current user', async () => {
@@ -21,8 +21,6 @@ it('returns details of the current user', async () => {
     .expect(200);
   expect(response.body.user.email).toEqual('test@test.com');
 });
-
-
 
 /*
 const signupResponse = await request(app)

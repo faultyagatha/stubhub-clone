@@ -5,10 +5,10 @@ import cookieSession from 'cookie-session';
 import { errorHandler, NotFoundError } from '@martiorg/common';
 import { currentUser } from '@martiorg/common';
 
-import { createTicketRouter } from './routes/new';
-import { showTicketRouter } from './routes/show';
-import { allTicketsRouter } from './routes/all';
-import { updateTicketRouter } from './routes/update';
+import { createOrderRouter } from './routes/new';
+import { showOrderRouter } from './routes/show';
+import { allOrdersRouter } from './routes/all';
+import { deleteOrderRouter } from './routes/delete';
 
 export const app = express();
 app.set('trust proxy', true);
@@ -21,10 +21,10 @@ app.use(
 );
 
 app.use(currentUser); //goes to requireAuth middleware on all protected routes
-app.use(createTicketRouter);
-app.use(showTicketRouter);
-app.use(allTicketsRouter);
-app.use(updateTicketRouter);
+app.use(createOrderRouter);
+app.use(showOrderRouter);
+app.use(allOrdersRouter);
+app.use(deleteOrderRouter);
 
 //async is properly handled without next() by 'express-async-errors'
 app.all('*', async (req, res) => {

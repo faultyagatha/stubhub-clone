@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: oders-mongo-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: oders-mongo
+  template:
+    metadata:
+      labels:
+        app: oders-mongo
+    spec:
+      containers:
+        - name: oders-mongo
+          image: mongo
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: oders-mongo-srv
+spec:
+  selector:
+    app: oders-mongo
+  ports:
+    - name: db
+      protocol: TCP
+      port: 27017
+      targetPort: 27017

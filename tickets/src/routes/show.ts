@@ -9,10 +9,14 @@ router.get('/api/tickets/:id', async (
   req: Request,
   res: Response
 ) => {
-  const ticket = await Ticket.findById(req.params.id);
-  console.log(req.params.id)
-  if (!ticket) throw new NotFoundError();
-  res.send(ticket);
+  try {
+    const ticket = await Ticket.findById(req.params.id);
+    console.log(req.params.id)
+    if (!ticket) throw new NotFoundError();
+    res.send(ticket);
+  } catch (err) {
+    console.log(err);
+  }
 });
 
-export { router as showTickerRouter };
+export { router as showTicketRouter };

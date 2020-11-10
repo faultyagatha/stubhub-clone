@@ -38,7 +38,7 @@ router.put('/api/tickets/:id',
 
     await ticket.save();
     //publish the event 
-    // TODO: better to save the event in the DB beforehand
+    // TODO: better to save the event in the DB
     new TicketUpdatedPublisher(natsWrapper.client).publish({
       id: ticket.id,
       title: ticket.title,
