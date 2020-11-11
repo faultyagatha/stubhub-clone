@@ -58,5 +58,4 @@ it('throws an error if a user tries to fetch another users order', async () => {
     .set('Cookie', user2)
     .send()
     .expect(401);
-
 });
