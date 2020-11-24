@@ -5,6 +5,7 @@ import { app } from '../../app';
 import { authHelper } from '../../test/authHelper';
 import { Order, OrderStatus } from '../../models/orders';
 import { Ticket } from '../../models/ticket';
+import { natsWrapper } from '../../nats-wrapper';
 
 it('returns an error if the ticket does not exist', async () => {
   const testTicketId = mongoose.Types.ObjectId();
@@ -52,4 +53,19 @@ it('reserves the ticket if everything is ok', async () => {
     .expect(201);
 });
 
-it.todo('emits an order created event');
+//it.todo('emits an order created event');
+it('emits an order created event', async () => {
+  const ticket = Ticket.createTicket({
+    title: 'testtitle',
+    price: 19
+  });
+  await ticket.save();
+
+  await request(app)
+    .post('/api/orders')
+    .set('Cookie', authHelper())
+    .send({ ticketId: ticket.id })
+    .expect(201);
+
+  expect(natsWrapper.client.publish).toHaveBeenCalled();
+});
