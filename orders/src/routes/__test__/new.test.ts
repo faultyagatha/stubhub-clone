@@ -18,6 +18,7 @@ it('returns an error if the ticket does not exist', async () => {
 
 it('returns an error if the ticket is already reserved', async () => {
   const ticket = Ticket.createTicket({
+    id: '1234',
     title: 'testtitle',
     price: 19
   });
@@ -41,6 +42,7 @@ it('returns an error if the ticket is already reserved', async () => {
 
 it('reserves the ticket if everything is ok', async () => {
   const ticket = Ticket.createTicket({
+    id: '1234',
     title: 'testtitle',
     price: 19
   });
@@ -56,6 +58,7 @@ it('reserves the ticket if everything is ok', async () => {
 //it.todo('emits an order created event');
 it('emits an order created event', async () => {
   const ticket = Ticket.createTicket({
+    id: '123',
     title: 'testtitle',
     price: 19
   });

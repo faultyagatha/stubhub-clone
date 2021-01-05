@@ -8,6 +8,7 @@ import { Order, OrderStatus } from './orders';
 
 /** interface describing the ticket schema properties */
 interface ITicket {
+  id: string,
   title: string;
   price: number;
 };
@@ -47,7 +48,11 @@ const ticketSchema = new mongoose.Schema({
 
 //custom safe ticket instantiation to help TS to protect ticket attributes
 ticketSchema.statics.createTicket = (attrs: ITicket) => {
-  return new Ticket(attrs);
+  return new Ticket({
+    _id: attrs.id,
+    title: attrs.title,
+    price: attrs.price
+  });
 };
 
 //run query to look at all orders. 

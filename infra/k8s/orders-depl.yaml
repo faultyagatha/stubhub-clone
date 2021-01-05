@@ -16,6 +16,14 @@ spec:
         - name: orders
           image: martinaheybuddy/orders
           env: 
+            - name: NATS_CLIENT_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: NATS_URL
+              value: 'http://nats-srv:4222'
+            - name: NATS_CLUSTER_ID
+              value: tickdev
             - name: MONGO_URL
               value: 'mongodb://orders-mongo-srv:27017/orders'
             - name: JWT_KEY
